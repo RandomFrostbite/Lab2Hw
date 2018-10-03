@@ -8,8 +8,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+
+    protected String mystery_word;
+    protected String guess_word;
+    int gallows_state;
+    String[] words;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +28,21 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, "Start new game?", Snackbar.LENGTH_LONG)
+                        .setAction("Yes", null).show();
             }
         });
+
+        // My code starts below
+        // Get all the words
+
+        words = getResources().getStringArray( R.array.words );
+        int number = (int)( words.length * Math.random() );
+        mystery_word = words[number];
+
+        // Paste keyword to layout
+        TextView keyword = findViewById( R.id.keyword );
+        keyword.setText( mystery_word );
     }
 
     @Override
