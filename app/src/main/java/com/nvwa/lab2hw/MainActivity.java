@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     protected String mystery_word, guess, displayMW;
-    int gallows_state = 0;
+    int gallows_state;
     String[] words;
 
     @Override
@@ -29,7 +29,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Snackbar.make( view, "Start new game?", Snackbar.LENGTH_LONG )
-                        .setAction("Yes", null).show();
+                        .setAction("Yes", new View.OnClickListener() {
+                            @Override
+                            public void onClick( View view ) {
+                                startGame(); } }).show();
             }
         });
 
@@ -38,15 +41,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startGame() {
+        gallows_state = 0;
         // Enable buttons
         findViewById( R.id.wordCheck ).setEnabled(true);
         findViewById( R.id.letterCheck ).setEnabled(true);
+        findViewById( R.id.guess ).setEnabled(true);
 
         // Get all the words
         words = getResources().getStringArray( R.array.words );
         int number = (int)( words.length * Math.random() );
-        //mystery_word = words[number];
-        mystery_word = "avadakedavra";
+        mystery_word = words[number];
 
         // Paste censored keyword to layout
         TextView keyword = findViewById( R.id.keyword );
@@ -72,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         guess = guess_word.getText().toString();
         // Check EditText for different conditions
         if ( guess.isEmpty() ) {
-            return; // later add a hint that input is empty
+            Snackbar.make( view, "Please type your word or letter.", Snackbar.LENGTH_SHORT ).show(); // later add a hint that input is empty
         } else if ( mystery_word.contains(guess) ) {
             StringBuilder tmp = new StringBuilder( displayMW );
             while (true) {
@@ -96,23 +100,27 @@ public class MainActivity extends AppCompatActivity {
                             getResources().getString( R.string.img2txtTail ) ); // set desc of image
 
         }
-        if ( gameFinished() )
-            endGame();
+        if ( ( gallows_state == 10 || displayMW.equals(mystery_word) ) )
+            endGame(view);
+        ((TextView)findViewById( R.id.guess )).setText("");
     }
 
-    public boolean gameFinished() {
-        if ( gallows_state == 10 || displayMW.equals(mystery_word) )
-            return true;
-        return false;
-    }
-
-    public void endGame() {
+    public void endGame( View view ) {
         findViewById( R.id.wordCheck ).setEnabled(false);
         findViewById( R.id.letterCheck ).setEnabled(false);
+        findViewById( R.id.guess ).setEnabled(false);
 
         // Game won
-
+        if ( displayMW.equals(mystery_word) ) {
+            ( (ImageView)findViewById( R.id.hangman ) ).setImageDrawable( getResources().getDrawable( R.drawable.hangman11 ) );
+            Snackbar.make(view, "Congratulations! You found the word!", Snackbar.LENGTH_LONG ).show();
+        }
         // Game lost
+        if ( gallows_state == 10 ) {
+            TextView keyword = findViewById( R.id.keyword );
+            keyword.setText(mystery_word); // show the word
+            Snackbar.make( view, "You lost :/ Better luck next time!", Snackbar.LENGTH_LONG ).show();
+        }
     }
 
     @Override
