@@ -20,7 +20,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="250dp"
-        android:contentDescription="@string/img2txt"
+        android:contentDescription="@string/img2txtHead"
         android:src="@drawable/hangman0" />
 
     <TextView
@@ -31,7 +31,7 @@
         android:layout_alignStart="@+id/hangman"
         android:layout_alignEnd="@+id/hangman"
         android:layout_marginTop="-230dp"
-        android:textAlignment="center"/>
+        android:textAlignment="center" />
 
     <EditText
         android:id="@+id/guess"
@@ -57,7 +57,8 @@
         android:layout_alignStart="@+id/guess"
         android:layout_marginStart="0dp"
         android:layout_marginTop="20dp"
-        android:text="@string/letterCheck" />
+        android:text="@string/letterCheck"
+        android:onClick="update"/>
 
     <Button
         android:id="@+id/wordCheck"
@@ -67,6 +68,7 @@
         android:layout_alignEnd="@+id/guess"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="0dp"
-        android:text="@string/wordCheck" />
+        android:text="@string/wordCheck"
+        android:onClick="update"/>
 
 </RelativeLayout>
